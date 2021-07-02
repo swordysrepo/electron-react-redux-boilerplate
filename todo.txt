@@ -1,1 +1,123 @@
 review hotreloading / update to include new files.
+
+
+
+info:
+Gulp can watch our files for changes. ... We can tell Gulp to watch for changes to specific files, or every file with a specific extension - all . css files for example - or entire directories, or any combination you can think of. When Gulp spots a change it will re-run the tasks we tell it to run.
+https://www.google.com/search?q=watch+gulp+definition&oq=watch+gulp+definition&aqs=chrome..69i57j35i39j46i67j0i67j69i60l3j69i65.10314j0j7&sourceid=chrome&ie=UTF-8
+
+
+review gulp , and gulp sourcemaps (script.js)
+const { src, dest } = require('gulp');
+const babel = require('gulp-babel');
+const sourcemaps = require('gulp-sourcemaps');
+const inject = require('gulp-inject-string');
+
+electron initialization.. with no sandbox? 
+function startElectron(done) {
+  subprocess = spawn(electron, ['.', '--no-sandbox'], {
+    env: { ...process.env, NODE_ENV: 'development' },
+    stdio: 'inherit',
+  });
+  done();
+}
+
+is this a risk to anyone using the boilerplate?  Sandboxes are supposed to be enabled.
+https://github.com/jschr/electron-react-redux-boilerplate/blob/master/tasks/electron.js
+can someone further explain what this file is doing? please
+https://github.com/jschr/electron-react-redux-boilerplate/blob/master/app/renderer/store.js
+
+view store
+  https://github.com/jschr/electron-react-redux-boilerplate/blob/master/app/renderer/store.js
+ this file organizes the current state of the user .. via Redux
+  
+import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
+import { connectRouter, routerMiddleware, push } from 'connected-react-router';
+import persistState from 'redux-localstorage';
+import thunk from 'redux-thunk';
+
+import user from './reducers/user';
+import userActions from './actions/user';
+
+export default function configureStore(initialState, routerHistory) {
+  const router = routerMiddleware(routerHistory);
+
+  const actionCreators = {
+    ...userActions,
+    push,
+  };
+
+  const reducers = {
+    router: connectRouter(routerHistory),
+    user,
+  };
+
+  const middlewares = [thunk, router];
+
+  const composeEnhancers = (() => {
+    const compose_ = window && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
+    if (process.env.NODE_ENV === 'development' && compose_) {
+      return compose_({ actionCreators });
+    }
+    return compose;
+  })();
+
+  const enhancer = composeEnhancers(applyMiddleware(...middlewares), persistState());
+  const rootReducer = combineReducers(reducers);
+
+  return createStore(rootReducer, initialState, enhancer);
+}
+
+
+this i assume ties into the state router
+for keeping after the login status ... but is there anything else it tracks? How could i add more to it.
+https://github.com/jschr/electron-react-redux-boilerplate/blob/master/app/renderer/routes.js
+
+
+
+and what does this do?
+could it keep trakc of whether the user changes their password , and send a request to our API to make the change?
+https://github.com/jschr/electron-react-redux-boilerplate/blob/master/app/renderer/reducers/user.js
+
+
+is this an example of the file getting filled by react? 
+https://github.com/jschr/electron-react-redux-boilerplate/blob/master/app/renderer/index.html
+where data-container:#app would be the container that is used to fill the div "app"
+
+
+
+does this connect to the login page?
+https://github.com/jschr/electron-react-redux-boilerplate/blob/master/app/renderer/containers/LoginPage.js
+i see it connects to the componetns page . One component which is a login. 
+
+
+we have to check to see what the components are . 
+
+this template is one of the first that i saw . and i did not want to use it becuase it has less stars. Less stars means less security .. BUT PERHAPS NOT. 
+but with that in mind .. things change. i want to use a template , i best understand it. 
+and with understanding that its safe, i am also understanding what makes it a template to begin with . 
+React here is integrated as it is a much cleaner 
+
+
+in this file the username is instantiated as empty
+https://github.com/jschr/electron-react-redux-boilerplate/blob/master/app/renderer/components/Login.js
+
+
+this file shows how an element changes when the user is logged in. 
+https://github.com/jschr/electron-react-redux-boilerplate/blob/master/app/renderer/components/LoggedIn.js
+we can use this to organize our own app. Dynamic JS . very good. 
+
+
+what is this file doing? 
+https://github.com/jschr/electron-react-redux-boilerplate/blob/master/app/renderer/app.js
+in this case , what is history doing? 
+what is history . 
+
+
+
+what is the format of the crashreporter in electron? 
+https://github.com/jschr/electron-react-redux-boilerplate/blob/master/app/main/index.js
+and menu . 
+is the menu just the thing that goes at the top? We can disable it easily enough then. 
+this also utlizes the "isDevelopment" library. 
+this also must set the crash report... SO i suppose it would report a crash to us . When it crashes. 
