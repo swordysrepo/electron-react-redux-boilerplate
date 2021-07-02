@@ -8,3 +8,5 @@ bracketSpacing: true
 jsxBracketSameLine: true
 arrowParens: always
 proseWrap: always
+
+# this file is basically used to define how the code should look , but does not throw any errors by itself. the full documentation shows what each option does.
