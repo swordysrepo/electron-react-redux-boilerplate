@@ -1,17 +1,78 @@
 sudo: false
+# sudo is an option commonly disabled .. and ALWAYS disabled when using docker . If this option is enabled , it would allow sudo calls in the code
+# these calls would then fail when running in a docker environment. this option will catch and throw the error before docker will need to. 
 
 language: node_js
-
+# this specifies which language the project is supposed to be written in.
+# https://www.google.com/search?q=specify+multiple+languages+in+travis+file&oq=specify+multiple+languages+in+travis+file&aqs=chrome..69i57.7176j0j4&sourceid=chrome&ie=UTF-8
+# covers when having multiple languages enabled. 
+# and this may be a problem when incorporating jsx files . (not sure)
 node_js:
+# more information is offered here https://docs.travis-ci.com/user/languages/javascript-with-nodejs/
+# The .nvmrc file is only read when node_js key in your .travis.yml files does not specify a nodejs version.
+# When the .nvmrc file is read, $TRAVIS_NODE_VERSION is set to the nodejs version. See nvm documentation for more information on .nvmrc.
+
+
   - '10'
+ #npm is now cached by default, in case you want to disable it, please add the following to your .travis.yml:
+ #cache:
+#  npm: false
+
+# note : our settings means that npm is the cache agent
+# In all other cases, this will cache node_modules.
+# Note that npm install will still run on every build and will update/install any new packages added to your package.json file.
+# this is what installs all the dependencies . and is also why we do not include our node_modules in our github .
+# Package.json is responsible, with the cache, to install all dependencies , like Poetry in python. (or a requirements file)
 cache: npm
 services:
+# this is something for some kind of visualization of a GUI . Not sure, haven't researched it further. 
   - xvfb
 
 install:
+# this is a list of things to do , like a bash script , to prepare the project to be executed . Becuase in this project all dependencies are included in package.json ,
+# we do not need to have a long list of things to do here . but this is frequently a very clean way of including a list of things to do. 
+# examples are here https://docs.travis-ci.com/user/languages/javascript-with-nodejs/
+# such things could be this ... (as example for a differnet project)
+#before_install:
+#    # setting the path for phantom.js 2.0.0
+ #   - export PATH=/usr/local/phantomjs-2.0.0/bin:$PATH
+  #  # starting a GUI to run tests, per https://docs.travis-ci.com/user/gui-and-headless-browsers/#using-xvfb-to-run-tests-that-require-a-gui
+   # - export DISPLAY=:99.0
+    #- sh -e /etc/init.d/xvfb start
+    #- "npm config set spin false"
+    #- "npm install -g npm@^2"
+#install:
+ #   - mkdir travis-phantomjs
+  #  - wget https://s3.amazonaws.com/travis-phantomjs/phantomjs-2.0.0-ubuntu-12.04.tar.bz2 -O $PWD/travis-phantomjs/phantomjs-2.0.0-ubuntu-12.04.tar.bz2
+   # - tar -xvf $PWD/travis-phantomjs/phantomjs-2.0.0-ubuntu-12.04.tar.bz2 -C $PWD/travis-phantomjs
+    #- export PATH=$PWD/travis-phantomjs:$PATH
+    #- npm install -g bower
+    #- npm install
+    #- bower install
+    
+    # note that it can 
   - npm install
 
 script:
+ # execute all of the commands which 
+  # should make the build pass or fail
+  # https://stackoverflow.com/questions/34377017/what-are-the-differences-between-the-before-install-script-travis-yml-opti
   - npm run check-format
   - npm run lint
   - npm test
+  
+  
+  
+  
+  
+# can add a gulp file:
+# If you already use Gulp to manage your tests, install it and run the default gulpfile.js by adding the following lines to your .travis.yml:
+#before_script:
+# - npm install -g gulp-cli
+# script: gulp
+# https://docs.travis-ci.com/user/languages/javascript-with-nodejs/
+
+
+
+# for more options here 
+# https://docs.travis-ci.com/user/job-lifecycle/
