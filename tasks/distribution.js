@@ -1,3 +1,6 @@
+// using electron builder to build 3 seperate distributions . mac, windows and linux . 
+
+
 const builder = require('electron-builder');
 
 function packWin() {
