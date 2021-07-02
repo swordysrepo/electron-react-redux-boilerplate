@@ -121,3 +121,4 @@ and menu .
 is the menu just the thing that goes at the top? We can disable it easily enough then. 
 this also utlizes the "isDevelopment" library. 
 this also must set the crash report... SO i suppose it would report a crash to us . When it crashes. 
+which extensions are added? perhaps it is a menu.. or variety of menus' that can be integrated. 
